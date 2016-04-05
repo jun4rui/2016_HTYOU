@@ -1,0 +1,49 @@
+<!--<!doctype html>-->
+<!--<html lang="zh-CN">-->
+<!--<head>-->
+	<!--<meta charset="UTF-8">-->
+	<!--<title>Document</title>-->
+	<!--<script>-->
+		<!--(function(document){-->
+			<!--var obj = {-->
+				<!--name:'test',-->
+				<!--content: '这是一个对象的说明',-->
+				<!--toString: function(){-->
+					<!--return this.name+':'+this.content;-->
+				<!--}-->
+			<!--};-->
+			<!--window.caojun = obj;-->
+		<!--})(document);-->
+	<!--</script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<script>-->
+	<!--console.log(caojun.name);-->
+	<!--console.log(caojun.content);-->
+	<!--console.log(caojun.toString());-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<script>
+	var obj = {
+		name:'test',
+		content: '这是一个对象的说明',
+		toString: function(){
+			return this.name+':'+this.content;
+		}
+	};
+	console.log(JSON.parse(JSON.stringify(obj)));
+
+	JSON.parse(JSON.stringify({function(){console.log(1);}}));
+</script>
+</body>
+</html>
