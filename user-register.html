@@ -82,7 +82,8 @@
 						var regPort = '/user/htuser_register.action?info_type=120605';
 						regPort += '&identifyId=' + $('#idcard').val();
 						regPort += '&phone=' + $('#phone').val();
-						regPort += '&account=' + $('#username').val();
+						regPort += '&account=' + $('#phone').val();
+						regPort += '&username=' + $('#username').val();
 						regPort += '&password=' + $('#password').val();
 						regPort += '&openid=' + $('#openid').val();
 						regPort += '&accesstoken=' + $('#accesstoken').val();
