@@ -7,7 +7,7 @@
 	<script src="http://www.htyou.com/common/jquery-1.11.0.min.js" charset="utf-8"></script>
 	<script>
 		//点击发送短信验证码的处理
-		(function($) {
+		(function ($) {
 			var status = false;
 			$(document).delegate('#sendSms', 'click', function (result) {
 				//如果电话号码栏目不合规范则不发送
@@ -20,16 +20,18 @@
 					return false;
 				}
 				$('#sendSms').val('60');//设置60秒间隔
+				$('#sendSms').prop('disabled', true);
 				intervalid = setInterval(function () {
 					if (parseInt($('#sendSms').val()) > 0) {
 						$('#sendSms').val(parseInt($('#sendSms').val()) - 1);
 					} else {
 						$('#sendSms').val('发送验证码');
+						$('#sendSms').prop('disabled', false);
 						clearInterval(intervalid);
 					}
 				}, 1000);
-				$.getJSON('http://www.htyou.com/user/htuser_sendSmsConfirm.action?phone=13762338415',function(result){
-					if (result.status=='false'){
+				$.getJSON('http://www.htyou.com/user/htuser_sendSmsConfirm.action?phone='+$('#phone').val(), function (result) {
+					if (result.status == 'false') {
 						alert('验证码发送失败，请稍后尝试');
 					}
 				});
@@ -40,20 +42,25 @@
 		//点击注册按钮执行的操作
 		(function ($) {
 			$(document).delegate('#regBtn', 'click', function () {
-				//先检查用户表单是否完整
-				if ( $('#username').val()=='' || $('#password').val()=='' || $('#repassword').val()=='' || $('#phone').val()=='' || $('#checkcode').val()=='' || $('#idcard').val()==''){
+				//先判断用户是否勾选同意协议的复选框
+				if (!$('input[type=checkbox]').prop('checked')){
+					alert('同意《华天旅游网服务条款》方可注册。');
+					return false;
+				}
+				//检查用户表单是否完整
+				if ($('#username').val() == '' || $('#password').val() == '' || $('#repassword').val() == '' || $('#phone').val() == '' || $('#checkcode').val() == '' || $('#idcard').val() == '') {
 					alert('您的资料填写不完整，请补充完整后重新提交');
 					return false;
 				}
-				if ($('#username').val().length<5){
-					alert('用户帐号太短，请至少有5个字符长');
+				if ($('#username').val().length < 2) {
+					alert('用户帐号太短，请至少有2个字符长');
 					return false;
 				}
-				if ($('#password').val().length<6){
-					alert('密码太短，请至少有6个字符长');
+				if ($('#password').val().length < 8) {
+					alert('密码太短，请至少有8个字符长');
 					return false;
 				}
-				if ($('#password').val()!=$('#repassword').val()){
+				if ($('#password').val() != $('#repassword').val()) {
 					alert('两次密码输入不一致，请检查');
 					return false;
 				}
@@ -61,7 +68,7 @@
 
 				//验证用户验证码是否正确
 				//alert('/user/htuser_getSmsConfirm.action?phone=' + $('#phone').val() + '&vaildcode=' + $('#checkcode').val());
-				$.getJSON('/user/htuser_getSmsConfirm.action?phone=' + $('#phone').val() + '&vaildcode=' + $('#checkcode').val(), function (result) {
+				$.getJSON('http://www.htyou.com/user/htuser_getSmsConfirm.action?phone=' + $('#phone').val() + '&vaildcode=' + $('#checkcode').val(), function (result) {
 					if (result.status == 1) {
 						//验证用户两次密码是否一致
 						if ($('#password').val() != $('#repassword').val()) {
@@ -71,15 +78,16 @@
 							return false;
 						}
 						//验证用户输入的account：5～32个字符长度，不能是中文
-						if ($('#username').val().match(/^[a-zA-Z]{1}[a-zA-Z0-9]{4,31}$/)==null){
-							alert('您的帐户名称必须用英文字母开头，并且只使用英文字符和数字，长度应该在5～32个字符之间');
+						if ($('#username').val().match(/^[a-zA-Z]{1}[a-zA-Z0-9]{4,31}$/) == null) {
+							alert('您的帐户名称必须用英文字母开头，并且只使用英文字符和数字，长度应该在2～32个字符之间');
 							return false;
 						}
 
 						//提交用户注册信息到注册接口
+						$('#regBtn').prop('disabled', true);
 						//20160316 曹熙要求把username参数改成account提交
 						//PC端注册的info_type是info_type=120605
-						var regPort = '/user/htuser_register.action?info_type=120605';
+						var regPort = 'http://www.htyou.com/user/htuser_register.action?info_type=120605';
 						regPort += '&identifyId=' + $('#idcard').val();
 						regPort += '&phone=' + $('#phone').val();
 						regPort += '&account=' + $('#phone').val();
@@ -87,25 +95,27 @@
 						regPort += '&password=' + $('#password').val();
 						regPort += '&openid=' + $('#openid').val();
 						regPort += '&accesstoken=' + $('#accesstoken').val();
-						//alert(regPort);
-						$.getJSON(regPort, function(result){
-							if (result.status==0){
+						//console.log(regPort);
+						$.getJSON(regPort, function (result) {
+							if (result.status == 0) {
 								alert('注册异常失败');
 								return false;
 							}
-							if (result.status==-1){
+							if (result.status == -1) {
 								alert('用户填写手机信息不正确或者已存在，请重新填写！');
 								return false;
 							}
-							if (result.status==-2){
+							if (result.status == -2) {
 								alert('用户身份证信息不规范或者已存在，请重新填写！');
 								return false;
 							}
-							if (result.status==1){
+							if (result.status == 1) {
 								alert('注册成功！系统将自动跳转到首页！');
 								window.localStorage.setItem('USER_DATA', JSON.stringify(result.guestVO));
-								window.location.href = 'index.html';
+								window.location.href = 'http://www.htyou.com';
 							}
+						}).done(function(){
+							$('#regBtn').prop('disabled', false);
 						});
 
 					}
@@ -121,14 +131,186 @@
 	</script>
 </head>
 <body>
-<form action="">
-	用户帐号：<input type="text" name="username" id="username" placeholder="请输入您的账号"><br>
-	用户密码：<input type="text" name="password" id="password" placeholder="请输入对应的密码"><br>
-	密码验证：<input type="text" name="repassword" id="repassword" placeholder="再次输入密码"><br>
-	手机号码：<input type="text" name="phone" id="phone" placeholder="请输入您的手机号码"><input type="button" value="发送验证码" id="sendSms"><br>
-	验证短信：<input type="text" name="checkcode" id="checkcode" placeholder="请输入验证码"><br>
-	身份证号：<input type="text" name="idcard" id="idcard" placeholder="请输入您的身份证号码"><br>
-	<input type="button" value="注册" id="regBtn">
-</form>
+<style>
+	body {
+		margin:0;
+		padding:0;
+		font: 12px 'WenQuanYi Micro Hei', 'Microsoft YaHei', '新宋体', sans-serif, Verdana, Helvetica, Arial;
+	}
+	a {
+		text-decoration:none;
+	}
+	input {
+		vertical-align: middle;
+	}
+	.panel-width {
+		width: 1040px;
+		margin: 0 auto;
+	}
+
+	#header-panel {
+		border-bottom: 3px solid #018BE4;
+	}
+	#header-panel>img {
+		margin:45px auto 12px 20px;
+		border:0;
+	}
+
+	#main-panel table {
+		margin:30px auto auto auto;
+
+	}
+	#main-panel table td {
+		line-height: 46px;
+	}
+
+	#main-panel table .td-left {
+		text-align: right;
+		font-size:16px;
+		color:#5a5a5a;
+
+	}
+	#main-panel table .td-right {
+		color:#a7a7a7;
+	}
+	#main-panel table .td-right>img {
+		vertical-align: middle;
+		margin-right:2px;
+	}
+	.inputbox {
+		width:237px;
+		height: 29px;
+		border: 1px solid #d2d2d2;
+		text-indent: .5em;
+	}
+	.color-gray {
+		color:#8f8e8e;
+	}
+	#sendSms {
+		width: 113px;
+		height: 33px;
+	}
+
+	#regBtn {
+		width:237px;
+		height:29px;
+		border:0px;
+		background-color: #018BE4;
+		color:#FFF;
+		font-size:18px;
+		font-family: 'WenQuanYi Micro Hei', 'Microsoft YaHei';
+	}
+</style>
+
+<div id="header-panel" class="panel-width">
+	<a href="http://www.htyou.com" target="_self" title="回到华天旅游网首页">
+		<img src="./images/logo_wb.png" alt="logo-img">
+	</a>
+</div>
+<!--主要内容-->
+<div id="main-panel" class="panel-width">
+	<table>
+		<tr>
+			<td colspan="3" style="text-indent:5em;">
+				<span style="font-size: 20px; color:#000;margin-right:1em;">会员注册</span>
+				<span style="font-size: 14px; color:#018be4; vertical-align: bottom;">注册成功可获1000积分+返现特权！</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="td-left">账号：</td>
+			<td>
+				<input type="text" name="username" id="username" placeholder="请输入您的账号" class="inputbox">
+			</td>
+			<td class="td-right"><img src="./images/icon_warning.png" alt="">可用作登陆名</td>
+		</tr>
+		<tr>
+			<td class="td-left">密码：</td>
+			<td>
+				<input type="password" name="password" id="password" placeholder="请输入对应的密码" class="inputbox">
+			</td>
+			<td class="td-right"><img src="./images/icon_warning.png" alt="">8-20位字母、数字和符号</td>
+		</tr>
+		<tr>
+			<td class="td-left">确认密码：</td>
+			<td>
+				<input type="password" name="repassword" id="repassword" placeholder="再次输入密码" class="inputbox">
+			</td>
+			<td class="td-right"><img src="./images/icon_warning.png" alt="">再次输入密码</td>
+		</tr>
+		<tr>
+			<td class="td-left">身份证号码：</td>
+			<td>
+				<input type="text" name="idcard" id="idcard" placeholder="请输入您的身份证号码" class="inputbox">
+			</td>
+			<td class="td-right"><img src="./images/icon_warning.png" alt="">请输入身份证号</td>
+		</tr>
+		<tr>
+			<td class="td-left">手机号码：</td>
+			<td>
+				<input type="text" name="phone" id="phone" placeholder="请输入您的手机号码" class="inputbox">
+			</td>
+			<td class="td-right"><img src="./images/icon_warning.png" alt="">请输入11位手机号码</td>
+		</tr>
+		<tr>
+			<td class="td-left">验证码：</td>
+			<td>
+				<input type="text" name="checkcode" id="checkcode" placeholder="请输入验证码" class="inputbox" style="width:9em;">
+				<input type="button" value="发送验证码" id="sendSms">
+			</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="td-left"></td>
+			<td><input type="checkbox">同意 <a href="#" class="color-gray">《华天旅游网服务条款》</a></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="td-left"></td>
+			<td>
+				<input type="button" value="注&nbsp;&nbsp;册" id="regBtn">
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</div>
+<!--/主要内容-->
+<!--底部显示-->
+<style>
+	#bottom-panel {
+		border-top: 1px dashed #9eccf5;
+		text-align: center;
+		font-size: 14px;
+		padding-top: 15px;
+		color:#8b8b8b;
+		margin-top:66px;
+	}
+	#bottom-panel a {
+		color:#00478E;
+	}
+	#bottom-panel #copyright {
+		margin-top:0.5em;
+	}
+</style>
+<div id="bottom-panel" class="panel-width">
+	<div class="linkpanel"></div>
+	<div id="copyright" class="panel-width">
+		Copyright &copy; 2015 <a href="http://www.htyou.com" target="_blank">www.htyou.com</a> 湖南华天国际旅行社有限责任公司版权所有
+	</div>
+</div>
+
+<script>
+	$('#bottom-panel').ready(function(){
+		$.getJSON('http://www.htyou.com/common/websinfo_queryWebsInfos.action?submit=ajax&infoClass=12&jsoncallback=?', function(result){
+			for (var i=0; i<result.length; i++){
+				if (i!=0){
+					$('#bottom-panel .linkpanel').append('&nbsp;&nbsp;|&nbsp;&nbsp;');
+				}
+				$('#bottom-panel .linkpanel').append('<a href="http://www.htyou.com'+result[i].url+'" target="_blank">'+result[i].info_name+'</a>');
+			}
+		});
+	});
+</script>
+<!--/底部显示-->
+
 </body>
 </html>
