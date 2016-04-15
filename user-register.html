@@ -110,9 +110,9 @@
 								return false;
 							}
 							if (result.status == 1) {
-								alert('注册成功！系统将自动跳转到首页！');
+								alert('注册成功！系统将自动跳转到登录页面，请在登陆页面用账号密码登陆！');
 								window.localStorage.setItem('USER_DATA', JSON.stringify(result.guestVO));
-								window.location.href = 'http://www.htyou.com';
+								window.location.href = 'http://www.htyou.com/login.htm';
 							}
 						}).done(function(){
 							$('#regBtn').prop('disabled', false);
