@@ -1,95 +1,91 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-	<meta charset="UTF-8">
-	<title>åŽå¤©æ—…æ¸¸ç½‘ï¼šç”¨æˆ·æ³¨å†Œ</title>
-	<!--http://www.htyou.com/common/temp/temp.html-->
-	<!--
-		æ³¨å†ŒæˆåŠŸä¼šè·³è½¬åˆ°ç™»é™†é¡µé¢æ–¹ä¾¿ç”¨æˆ·ç™»å½•
-	-->
-	<script src="http://www.htyou.com/common/jquery-1.11.0.min.js" charset="utf-8"></script>
+	<meta charset="GBK">
+	<title>»ªÌìÂÃÓÎÍø£ºÓÃ»§×¢²á</title>
+	<script src="http://www.htyou.com/common/jquery-1.11.0.min.js"></script>
 	<script>
-		//ç‚¹å‡»å‘é€çŸ­ä¿¡éªŒè¯ç çš„å¤„ç†
+		//µã»÷·¢ËÍ¶ÌÐÅÑéÖ¤ÂëµÄ´¦Àí
 		(function ($) {
 			var status = false;
 			$(document).delegate('#sendSms', 'click', function (result) {
-				//å¦‚æžœç”µè¯å·ç æ ç›®ä¸åˆè§„èŒƒåˆ™ä¸å‘é€
+				//Èç¹ûµç»°ºÅÂëÀ¸Ä¿²»ºÏ¹æ·¶Ôò²»·¢ËÍ
 				if ($('#phone').val() != $('#phone').val().match(/^1[0-9]{10}$/)) {
-					alert('æ‰‹æœºå·ç é”™è¯¯ï¼Œè¯·ä¿®æ”¹åŽé‡æ–°å‘é€');
+					alert('ÊÖ»úºÅÂë´íÎó£¬ÇëÐÞ¸ÄºóÖØÐÂ·¢ËÍ');
 					return false;
 				}
 				var intervalid = null;
-				if ($('#sendSms').val() != 'å‘é€éªŒè¯ç ') {
+				if ($('#sendSms').val() != '·¢ËÍÑéÖ¤Âë') {
 					return false;
 				}
-				$('#sendSms').val('60');//è®¾ç½®60ç§’é—´éš”
+				$('#sendSms').val('60');//ÉèÖÃ60Ãë¼ä¸ô
 				$('#sendSms').prop('disabled', true);
 				intervalid = setInterval(function () {
 					if (parseInt($('#sendSms').val()) > 0) {
 						$('#sendSms').val(parseInt($('#sendSms').val()) - 1);
 					} else {
-						$('#sendSms').val('å‘é€éªŒè¯ç ');
+						$('#sendSms').val('·¢ËÍÑéÖ¤Âë');
 						$('#sendSms').prop('disabled', false);
 						clearInterval(intervalid);
 					}
 				}, 1000);
 				$.getJSON('http://www.htyou.com/user/htuser_sendSmsConfirm.action?phone='+$('#phone').val(), function (result) {
 					if (result.status == 'false') {
-						alert('éªŒè¯ç å‘é€å¤±è´¥ï¼Œè¯·ç¨åŽå°è¯•');
+						alert('ÑéÖ¤Âë·¢ËÍÊ§°Ü£¬ÇëÉÔºó³¢ÊÔ');
 					}
 				});
 
 			});
 		})($);
-		//æ³¨å†Œæµç¨‹
-		//ç‚¹å‡»æ³¨å†ŒæŒ‰é’®æ‰§è¡Œçš„æ“ä½œ
+		//×¢²áÁ÷³Ì
+		//µã»÷×¢²á°´Å¥Ö´ÐÐµÄ²Ù×÷
 		(function ($) {
 			$(document).delegate('#regBtn', 'click', function () {
-				//å…ˆåˆ¤æ–­ç”¨æˆ·æ˜¯å¦å‹¾é€‰åŒæ„åè®®çš„å¤é€‰æ¡†
+				//ÏÈÅÐ¶ÏÓÃ»§ÊÇ·ñ¹´Ñ¡Í¬ÒâÐ­ÒéµÄ¸´Ñ¡¿ò
 				if (!$('input[type=checkbox]').prop('checked')){
-					alert('åŒæ„ã€ŠåŽå¤©æ—…æ¸¸ç½‘æœåŠ¡æ¡æ¬¾ã€‹æ–¹å¯æ³¨å†Œã€‚');
+					alert('Í¬Òâ¡¶»ªÌìÂÃÓÎÍø·þÎñÌõ¿î¡··½¿É×¢²á¡£');
 					return false;
 				}
-				//æ£€æŸ¥ç”¨æˆ·è¡¨å•æ˜¯å¦å®Œæ•´
+				//¼ì²éÓÃ»§±íµ¥ÊÇ·ñÍêÕû
 				if ($('#username').val() == '' || $('#password').val() == '' || $('#repassword').val() == '' || $('#phone').val() == '' || $('#checkcode').val() == '' || $('#idcard').val() == '') {
-					alert('æ‚¨çš„èµ„æ–™å¡«å†™ä¸å®Œæ•´ï¼Œè¯·è¡¥å……å®Œæ•´åŽé‡æ–°æäº¤');
+					alert('ÄúµÄ×ÊÁÏÌîÐ´²»ÍêÕû£¬Çë²¹³äÍêÕûºóÖØÐÂÌá½»');
 					return false;
 				}
 				if ($('#username').val().length < 2) {
-					alert('ç”¨æˆ·å¸å·å¤ªçŸ­ï¼Œè¯·è‡³å°‘æœ‰2ä¸ªå­—ç¬¦é•¿');
+					alert('ÓÃ»§ÕÊºÅÌ«¶Ì£¬ÇëÖÁÉÙÓÐ2¸ö×Ö·û³¤');
 					return false;
 				}
 				if ($('#password').val().length < 8) {
-					alert('å¯†ç å¤ªçŸ­ï¼Œè¯·è‡³å°‘æœ‰8ä¸ªå­—ç¬¦é•¿');
+					alert('ÃÜÂëÌ«¶Ì£¬ÇëÖÁÉÙÓÐ8¸ö×Ö·û³¤');
 					return false;
 				}
 				if ($('#password').val() != $('#repassword').val()) {
-					alert('ä¸¤æ¬¡å¯†ç è¾“å…¥ä¸ä¸€è‡´ï¼Œè¯·æ£€æŸ¥');
+					alert('Á½´ÎÃÜÂëÊäÈë²»Ò»ÖÂ£¬Çë¼ì²é');
 					return false;
 				}
 
 
-				//éªŒè¯ç”¨æˆ·éªŒè¯ç æ˜¯å¦æ­£ç¡®
+				//ÑéÖ¤ÓÃ»§ÑéÖ¤ÂëÊÇ·ñÕýÈ·
 				//alert('/user/htuser_getSmsConfirm.action?phone=' + $('#phone').val() + '&vaildcode=' + $('#checkcode').val());
 				$.getJSON('http://www.htyou.com/user/htuser_getSmsConfirm.action?phone=' + $('#phone').val() + '&vaildcode=' + $('#checkcode').val(), function (result) {
 					if (result.status == 1) {
-						//éªŒè¯ç”¨æˆ·ä¸¤æ¬¡å¯†ç æ˜¯å¦ä¸€è‡´
+						//ÑéÖ¤ÓÃ»§Á½´ÎÃÜÂëÊÇ·ñÒ»ÖÂ
 						if ($('#password').val() != $('#repassword').val()) {
 							$('#password').val('');
 							$('#repassword').val('');
-							alert('æ‚¨ä¸¤æ¬¡è¾“å…¥çš„å¯†ç ä¸ä¸€è‡´ï¼Œè¯·é‡æ–°å¡«å†™å†æäº¤');
+							alert('ÄúÁ½´ÎÊäÈëµÄÃÜÂë²»Ò»ÖÂ£¬ÇëÖØÐÂÌîÐ´ÔÙÌá½»');
 							return false;
 						}
-						//éªŒè¯ç”¨æˆ·è¾“å…¥çš„accountï¼š5ï½ž32ä¸ªå­—ç¬¦é•¿åº¦ï¼Œä¸èƒ½æ˜¯ä¸­æ–‡
+						//ÑéÖ¤ÓÃ»§ÊäÈëµÄaccount£º5¡«32¸ö×Ö·û³¤¶È£¬²»ÄÜÊÇÖÐÎÄ
 						if ($('#username').val().match(/^[a-zA-Z]{1}[a-zA-Z0-9]{4,31}$/) == null) {
-							alert('æ‚¨çš„å¸æˆ·åç§°å¿…é¡»ç”¨è‹±æ–‡å­—æ¯å¼€å¤´ï¼Œå¹¶ä¸”åªä½¿ç”¨è‹±æ–‡å­—ç¬¦å’Œæ•°å­—ï¼Œé•¿åº¦åº”è¯¥åœ¨2ï½ž32ä¸ªå­—ç¬¦ä¹‹é—´');
+							alert('ÄúµÄÕÊ»§Ãû³Æ±ØÐëÓÃÓ¢ÎÄ×ÖÄ¸¿ªÍ·£¬²¢ÇÒÖ»Ê¹ÓÃÓ¢ÎÄ×Ö·ûºÍÊý×Ö£¬³¤¶ÈÓ¦¸ÃÔÚ2¡«32¸ö×Ö·ûÖ®¼ä');
 							return false;
 						}
 
-						//æäº¤ç”¨æˆ·æ³¨å†Œä¿¡æ¯åˆ°æ³¨å†ŒæŽ¥å£
+						//Ìá½»ÓÃ»§×¢²áÐÅÏ¢µ½×¢²á½Ó¿Ú
 						$('#regBtn').prop('disabled', true);
-						//20160316 æ›¹ç†™è¦æ±‚æŠŠusernameå‚æ•°æ”¹æˆaccountæäº¤
-						//PCç«¯æ³¨å†Œçš„info_typeæ˜¯info_type=120605
+						//20160316 ²ÜÎõÒªÇó°Ñusername²ÎÊý¸Ä³ÉaccountÌá½»
+						//PC¶Ë×¢²áµÄinfo_typeÊÇinfo_type=120605
 						var regPort = 'http://www.htyou.com/user/htuser_register.action?info_type=120605';
 						regPort += '&identifyId=' + $('#idcard').val();
 						regPort += '&phone=' + $('#phone').val();
@@ -101,19 +97,19 @@
 						//console.log(regPort);
 						$.getJSON(regPort, function (result) {
 							if (result.status == 0) {
-								alert('æ³¨å†Œå¼‚å¸¸å¤±è´¥');
+								alert('×¢²áÒì³£Ê§°Ü');
 								return false;
 							}
 							if (result.status == -1) {
-								alert('ç”¨æˆ·å¡«å†™æ‰‹æœºä¿¡æ¯ä¸æ­£ç¡®æˆ–è€…å·²å­˜åœ¨ï¼Œè¯·é‡æ–°å¡«å†™ï¼');
+								alert('ÓÃ»§ÌîÐ´ÊÖ»úÐÅÏ¢²»ÕýÈ·»òÕßÒÑ´æÔÚ£¬ÇëÖØÐÂÌîÐ´£¡');
 								return false;
 							}
 							if (result.status == -2) {
-								alert('ç”¨æˆ·èº«ä»½è¯ä¿¡æ¯ä¸è§„èŒƒæˆ–è€…å·²å­˜åœ¨ï¼Œè¯·é‡æ–°å¡«å†™ï¼');
+								alert('ÓÃ»§Éí·ÝÖ¤ÐÅÏ¢²»¹æ·¶»òÕßÒÑ´æÔÚ£¬ÇëÖØÐÂÌîÐ´£¡');
 								return false;
 							}
 							if (result.status == 1) {
-								alert('æ³¨å†ŒæˆåŠŸï¼ç³»ç»Ÿå°†è‡ªåŠ¨è·³è½¬åˆ°ç™»å½•é¡µé¢ï¼Œè¯·åœ¨ç™»é™†é¡µé¢ç”¨è´¦å·å¯†ç ç™»é™†ï¼');
+								alert('×¢²á³É¹¦£¡ÏµÍ³½«×Ô¶¯Ìø×ªµ½µÇÂ¼Ò³Ãæ£¬ÇëÔÚµÇÂ½Ò³ÃæÓÃÕËºÅÃÜÂëµÇÂ½£¡');
 								window.localStorage.setItem('USER_DATA', JSON.stringify(result.guestVO));
 								window.location.href = 'http://www.htyou.com/login.htm';
 							}
@@ -123,11 +119,11 @@
 
 					}
 					if (result.status == 0) {
-						alert('æ‚¨çš„éªŒè¯ç é”™è¯¯ï¼Œè¯·é‡æ–°èŽ·å–éªŒè¯ç åŽå†å°è¯•ã€‚')
+						alert('ÄúµÄÑéÖ¤Âë´íÎó£¬ÇëÖØÐÂ»ñÈ¡ÑéÖ¤ÂëºóÔÙ³¢ÊÔ¡£')
 					}
 				});
-				//éªŒè¯ç æ­£ç¡®åŽåœ¨æäº¤æ³¨å†Œ
-				//éªŒè¯ç ä¸æ­£ç¡®åˆ™
+				//ÑéÖ¤ÂëÕýÈ·ºóÔÚÌá½»×¢²á
+				//ÑéÖ¤Âë²»ÕýÈ·Ôò
 				return false;
 			});
 		})($);
@@ -138,7 +134,7 @@
 	body {
 		margin:0;
 		padding:0;
-		font: 12px 'WenQuanYi Micro Hei', 'Microsoft YaHei', 'æ–°å®‹ä½“', sans-serif, Verdana, Helvetica, Arial;
+		font: 12px 'WenQuanYi Micro Hei', 'Microsoft YaHei', 'ÐÂËÎÌå', sans-serif, Verdana, Helvetica, Arial;
 	}
 	a {
 		text-decoration:none;
@@ -202,82 +198,88 @@
 		color:#FFF;
 		font-size:18px;
 		font-family: 'WenQuanYi Micro Hei', 'Microsoft YaHei';
+		cursor:pointer;
 	}
 </style>
 
 <div id="header-panel" class="panel-width">
-	<a href="http://www.htyou.com" target="_self" title="å›žåˆ°åŽå¤©æ—…æ¸¸ç½‘é¦–é¡µ">
-		<img src="./images/logo_wb.png" alt="logo-img">
+	<a href="http://www.htyou.com" target="_self" title="»Øµ½»ªÌìÂÃÓÎÍøÊ×Ò³">
+		<img src="/images/2016/logo_wb.png" alt="logo-img">
 	</a>
 </div>
-<!--ä¸»è¦å†…å®¹-->
+<!--Ö÷ÒªÄÚÈÝ-->
 <div id="main-panel" class="panel-width">
 	<table>
 		<tr>
 			<td colspan="3" style="text-indent:5em;">
-				<span style="font-size: 20px; color:#000;margin-right:1em;">ä¼šå‘˜æ³¨å†Œ</span>
-				<span style="font-size: 14px; color:#018be4; vertical-align: bottom;">æ³¨å†ŒæˆåŠŸå¯èŽ·1000ç§¯åˆ†+è¿”çŽ°ç‰¹æƒï¼</span>
+				<span style="font-size: 20px; color:#000;margin-right:1em;">»áÔ±×¢²á</span>
+				<span style="font-size: 14px; color:#018be4; vertical-align: bottom;">×¢²á³É¹¦¿É»ñ1000»ý·Ö+·µÏÖÌØÈ¨£¡</span>
 			</td>
 		</tr>
 		<tr>
-			<td class="td-left">è´¦å·ï¼š</td>
+			<td class="td-left">ÕËºÅ£º</td>
 			<td>
-				<input type="text" name="username" id="username" placeholder="è¯·è¾“å…¥æ‚¨çš„è´¦å·" class="inputbox">
+				<input type="text" name="username" id="username" placeholder="ÇëÊäÈëÄúµÄÕËºÅ" class="inputbox">
 			</td>
-			<td class="td-right"><img src="./images/icon_warning.png" alt="">å¯ç”¨ä½œç™»é™†å</td>
+			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">¿ÉÓÃ×÷µÇÂ½Ãû</td>
 		</tr>
 		<tr>
-			<td class="td-left">å¯†ç ï¼š</td>
+			<td class="td-left">ÃÜÂë£º</td>
 			<td>
-				<input type="password" name="password" id="password" placeholder="è¯·è¾“å…¥å¯¹åº”çš„å¯†ç " class="inputbox">
+				<input type="password" name="password" id="password" placeholder="ÇëÊäÈë¶ÔÓ¦µÄÃÜÂë" class="inputbox">
 			</td>
-			<td class="td-right"><img src="./images/icon_warning.png" alt="">8-20ä½å­—æ¯ã€æ•°å­—å’Œç¬¦å·</td>
+			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">8-20Î»×ÖÄ¸¡¢Êý×ÖºÍ·ûºÅ</td>
 		</tr>
 		<tr>
-			<td class="td-left">ç¡®è®¤å¯†ç ï¼š</td>
+			<td class="td-left">È·ÈÏÃÜÂë£º</td>
 			<td>
-				<input type="password" name="repassword" id="repassword" placeholder="å†æ¬¡è¾“å…¥å¯†ç " class="inputbox">
+				<input type="password" name="repassword" id="repassword" placeholder="ÔÙ´ÎÊäÈëÃÜÂë" class="inputbox">
 			</td>
-			<td class="td-right"><img src="./images/icon_warning.png" alt="">å†æ¬¡è¾“å…¥å¯†ç </td>
+			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">ÔÙ´ÎÊäÈëÃÜÂë</td>
 		</tr>
 		<tr>
-			<td class="td-left">èº«ä»½è¯å·ç ï¼š</td>
+			<td class="td-left">Éí·ÝÖ¤ºÅÂë£º</td>
 			<td>
-				<input type="text" name="idcard" id="idcard" placeholder="è¯·è¾“å…¥æ‚¨çš„èº«ä»½è¯å·ç " class="inputbox">
+				<input type="text" name="idcard" id="idcard" placeholder="ÇëÊäÈëÄúµÄÉí·ÝÖ¤ºÅÂë" class="inputbox">
 			</td>
-			<td class="td-right"><img src="./images/icon_warning.png" alt="">è¯·è¾“å…¥èº«ä»½è¯å·</td>
+			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">ÇëÊäÈëÉí·ÝÖ¤ºÅ</td>
 		</tr>
 		<tr>
-			<td class="td-left">æ‰‹æœºå·ç ï¼š</td>
+			<td class="td-left">ÊÖ»úºÅÂë£º</td>
 			<td>
-				<input type="text" name="phone" id="phone" placeholder="è¯·è¾“å…¥æ‚¨çš„æ‰‹æœºå·ç " class="inputbox">
+				<input type="text" name="phone" id="phone" placeholder="ÇëÊäÈëÄúµÄÊÖ»úºÅÂë" class="inputbox">
 			</td>
-			<td class="td-right"><img src="./images/icon_warning.png" alt="">è¯·è¾“å…¥11ä½æ‰‹æœºå·ç </td>
+			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">ÇëÊäÈëÊÖ»úºÅÂë</td>
 		</tr>
 		<tr>
-			<td class="td-left">éªŒè¯ç ï¼š</td>
+			<td class="td-left">ÑéÖ¤Âë£º</td>
 			<td>
-				<input type="text" name="checkcode" id="checkcode" placeholder="è¯·è¾“å…¥éªŒè¯ç " class="inputbox" style="width:9em;">
-				<input type="button" value="å‘é€éªŒè¯ç " id="sendSms">
+				<input type="text" name="checkcode" id="checkcode" placeholder="ÇëÊäÈëÑéÖ¤Âë" class="inputbox" style="width:9em;">
+				<input type="button" value="·¢ËÍÑéÖ¤Âë" id="sendSms">
 			</td>
 			<td></td>
 		</tr>
 		<tr>
 			<td class="td-left"></td>
-			<td><input type="checkbox">åŒæ„ <a href="#" class="color-gray">ã€ŠåŽå¤©æ—…æ¸¸ç½‘æœåŠ¡æ¡æ¬¾ã€‹</a></td>
+			<td><input type="checkbox">Í¬Òâ <a href="#" class="color-gray">¡¶»ªÌìÂÃÓÎÍø·þÎñÌõ¿î¡·</a></td>
 			<td></td>
 		</tr>
 		<tr>
 			<td class="td-left"></td>
 			<td>
-				<input type="button" value="æ³¨&nbsp;&nbsp;å†Œ" id="regBtn">
+				<input type="button" value="×¢&nbsp;&nbsp;²á" id="regBtn">
 			</td>
 			<td></td>
+		</tr>
+		<tr>
+			<td colspan="3" style="color:#a7a7a7;">
+				Èç¹ûÄúÒÑÓÐÕËºÅ£¬¿ÉÒÔµã»÷ÕâÀï <a href="/login.htm">µÇÂ½</a>£¬Èç¹ûÃÜÂëÒÅÊ§£¬¿ÉÒÔµã»÷ÕâÀï <a href="/page/common/finderps.htm">ÕÒ»ØÃÜÂë</a>
+			</td>
 		</tr>
 	</table>
 </div>
-<!--/ä¸»è¦å†…å®¹-->
-<!--åº•éƒ¨æ˜¾ç¤º-->
+<!--/Ö÷ÒªÄÚÈÝ-->
+<!--µ×²¿ÏÔÊ¾-->
 <style>
 	#bottom-panel {
 		border-top: 1px dashed #9eccf5;
@@ -297,7 +299,7 @@
 <div id="bottom-panel" class="panel-width">
 	<div class="linkpanel"></div>
 	<div id="copyright" class="panel-width">
-		Copyright &copy; 2015 <a href="http://www.htyou.com" target="_blank">www.htyou.com</a> æ¹–å—åŽå¤©å›½é™…æ—…è¡Œç¤¾æœ‰é™è´£ä»»å…¬å¸ç‰ˆæƒæ‰€æœ‰
+		Copyright &copy; 2015 <a href="http://www.htyou.com" target="_blank">www.htyou.com</a> ºþÄÏ»ªÌì¹ú¼ÊÂÃÐÐÉçÓÐÏÞÔðÈÎ¹«Ë¾°æÈ¨ËùÓÐ
 	</div>
 </div>
 
@@ -313,7 +315,7 @@
 		});
 	});
 </script>
-<!--/åº•éƒ¨æ˜¾ç¤º-->
+<!--/µ×²¿ÏÔÊ¾-->
 
 </body>
 </html>
