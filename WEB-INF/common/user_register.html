@@ -15,16 +15,16 @@
 					return false;
 				}
 				var intervalid = null;
-				if ($('#sendSms').val() != '发送验证码') {
+				if ($('#sendSms').val() != '获取') {
 					return false;
 				}
-				$('#sendSms').val('60');//设置60秒间隔
+				$('#sendSms').val('120');//设置60秒间隔
 				$('#sendSms').prop('disabled', true);
 				intervalid = setInterval(function () {
 					if (parseInt($('#sendSms').val()) > 0) {
 						$('#sendSms').val(parseInt($('#sendSms').val()) - 1);
 					} else {
-						$('#sendSms').val('发送验证码');
+						$('#sendSms').val('获取');
 						$('#sendSms').prop('disabled', false);
 						clearInterval(intervalid);
 					}
@@ -52,7 +52,7 @@
 					return false;
 				}
 				if ($('#username').val().length < 2) {
-					alert('用户帐号太短，请至少有2个字符长');
+					alert('姓名太短，请至少有2个字符长');
 					return false;
 				}
 				if ($('#password').val().length < 8) {
@@ -77,8 +77,8 @@
 							return false;
 						}
 						//验证用户输入的account：5～32个字符长度，不能是中文
-						if ($('#username').val().match(/^[a-zA-Z]{1}[a-zA-Z0-9]{4,31}$/) == null) {
-							alert('您的帐户名称必须用英文字母开头，并且只使用英文字符和数字，长度应该在2～32个字符之间');
+						if ($('#username').val() == '') {
+							alert('您的姓名不能为空');
 							return false;
 						}
 
@@ -213,15 +213,37 @@
 		<tr>
 			<td colspan="3" style="text-indent:5em;">
 				<span style="font-size: 20px; color:#000;margin-right:1em;">会员注册</span>
-				<span style="font-size: 14px; color:#018be4; vertical-align: bottom;">注册成功可获1000积分+返现特权！</span>
+				<span style="font-size: 14px; color:#018be4; vertical-align: bottom;">注册成功可获1000积分！</span>
 			</td>
 		</tr>
 		<tr>
-			<td class="td-left">账号：</td>
+			<td class="td-left">手机号码：</td>
 			<td>
-				<input type="text" name="username" id="username" placeholder="请输入您的账号" class="inputbox">
+				<input type="text" name="phone" id="phone" placeholder="请输入您的手机号码即帐号" class="inputbox">
 			</td>
-			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">可用作登陆名</td>
+			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">请输入手机号码即帐号</td>
+		</tr>
+		<tr>
+			<td class="td-left">验证码：</td>
+			<td>
+				<input type="text" name="checkcode" id="checkcode" placeholder="请输入验证码" class="inputbox" style="width:9em;">
+				<input type="button" value="获取" id="sendSms">
+			</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="td-left">姓名：</td>
+			<td>
+				<input type="text" name="username" id="username" placeholder="请输入您的姓名" class="inputbox">
+			</td>
+			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">作为显示用</td>
+		</tr>
+		<tr>
+			<td class="td-left">身份证号码：</td>
+			<td>
+				<input type="text" name="idcard" id="idcard" placeholder="请输入您的身份证号码" class="inputbox">
+			</td>
+			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">请输入身份证号</td>
 		</tr>
 		<tr>
 			<td class="td-left">密码：</td>
@@ -236,28 +258,6 @@
 				<input type="password" name="repassword" id="repassword" placeholder="再次输入密码" class="inputbox">
 			</td>
 			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">再次输入密码</td>
-		</tr>
-		<tr>
-			<td class="td-left">身份证号码：</td>
-			<td>
-				<input type="text" name="idcard" id="idcard" placeholder="请输入您的身份证号码" class="inputbox">
-			</td>
-			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">请输入身份证号</td>
-		</tr>
-		<tr>
-			<td class="td-left">手机号码：</td>
-			<td>
-				<input type="text" name="phone" id="phone" placeholder="请输入您的手机号码" class="inputbox">
-			</td>
-			<td class="td-right"><img src="/images/2016/icon_warning.png" alt="">请输入手机号码</td>
-		</tr>
-		<tr>
-			<td class="td-left">验证码：</td>
-			<td>
-				<input type="text" name="checkcode" id="checkcode" placeholder="请输入验证码" class="inputbox" style="width:9em;">
-				<input type="button" value="发送验证码" id="sendSms">
-			</td>
-			<td></td>
 		</tr>
 		<tr>
 			<td class="td-left"></td>
